@@ -265,6 +265,270 @@
             background: var(--color-secondary);
         }
 
+        button.config {
+            border-color: #ffa500;
+            color: #ffa500;
+        }
+
+        button.config:hover {
+            background: #ffa500;
+            color: var(--color-bg);
+            box-shadow: 0 0 30px #ffa500;
+        }
+
+        button.config::before {
+            background: #ffa500;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--color-bg-light);
+            border: 2px solid var(--color-primary);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            color: var(--color-primary);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+            min-width: auto;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--color-secondary);
+            background: none;
+            transform: none;
+        }
+
+        .modal-body p {
+            color: var(--color-text-dim);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .time-input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .time-input-group label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .time-input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--color-bg);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--color-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .time-input-group input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .phase-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-selector label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        .phase-select-btn {
+            padding: 0.8rem;
+            background: var(--color-bg);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: var(--color-text-dim);
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .phase-select-btn.active {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .phase-select-btn:hover {
+            border-color: var(--color-text);
+            color: var(--color-text);
+            transform: translateY(-2px);
+        }
+
+        .apply-btn {
+            width: 100%;
+            background: var(--color-primary);
+            border: none;
+            color: var(--color-bg);
+            padding: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .apply-btn:hover {
+            background: var(--color-text);
+            box-shadow: 0 0 30px var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .calendar-export {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .export-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        .export-btn:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .export-options {
+            margin-top: 1.5rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .export-options h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .days-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .days-btn {
+            background: var(--color-bg);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .days-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
         .cycle-info {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -367,6 +631,15 @@
             button {
                 width: 100%;
             }
+            
+            .days-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -390,6 +663,40 @@
         <div class="controls">
             <button id="toggleBtn">Start</button>
             <button class="reset" id="resetBtn">Reset</button>
+            <button class="config" id="configBtn">⏰ Startzeit</button>
+        </div>
+
+        <!-- Start Time Configuration Modal -->
+        <div class="modal" id="startTimeModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>⏰ Startzeit festlegen</h3>
+                    <button class="close-btn" id="closeModal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p>Wann hast du mit dem Fasten begonnen?</p>
+                    
+                    <div class="time-input-group">
+                        <label>Datum:</label>
+                        <input type="date" id="startDate" />
+                    </div>
+                    
+                    <div class="time-input-group">
+                        <label>Uhrzeit:</label>
+                        <input type="time" id="startTime" />
+                    </div>
+                    
+                    <div class="phase-selector">
+                        <label>Phase beim Start:</label>
+                        <div class="phase-buttons">
+                            <button class="phase-select-btn active" data-phase="active">🥗 Fasten</button>
+                            <button class="phase-select-btn" data-phase="rest">🍽️ Essensphase</button>
+                        </div>
+                    </div>
+                    
+                    <button class="apply-btn" id="applyStartTime">Anwenden</button>
+                </div>
+            </div>
         </div>
 
         <div class="cycle-info">
@@ -402,6 +709,19 @@
                 <div class="cycle-item" id="restPhaseCard">
                     <div class="cycle-label">Essensphase</div>
                     <div class="cycle-time">12h</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calendar-export">
+            <button class="export-btn" id="exportBtn">📅 Zu Google Kalender hinzufügen</button>
+            <div class="export-options" id="exportOptions" style="display: none;">
+                <h4>Wie viele Tage?</h4>
+                <div class="days-selector">
+                    <button class="days-btn" data-days="7">7 Tage</button>
+                    <button class="days-btn" data-days="14">14 Tage</button>
+                    <button class="days-btn" data-days="30">30 Tage</button>
+                    <button class="days-btn" data-days="60">60 Tage</button>
                 </div>
             </div>
         </div>
@@ -436,6 +756,15 @@
                 this.restPhaseCard = document.getElementById('restPhaseCard');
                 this.mode36Btn = document.getElementById('mode36Btn');
                 this.mode16Btn = document.getElementById('mode16Btn');
+                this.exportBtn = document.getElementById('exportBtn');
+                this.exportOptions = document.getElementById('exportOptions');
+                this.configBtn = document.getElementById('configBtn');
+                this.startTimeModal = document.getElementById('startTimeModal');
+                this.closeModal = document.getElementById('closeModal');
+                this.applyStartTime = document.getElementById('applyStartTime');
+                this.startDateInput = document.getElementById('startDate');
+                this.startTimeInput = document.getElementById('startTime');
+                this.selectedPhase = 'active';
                 
                 this.loadState();
                 this.setupEventListeners();
@@ -450,6 +779,215 @@
                 this.resetBtn.addEventListener('click', () => this.reset());
                 this.mode36Btn.addEventListener('click', () => this.switchMode('36/12'));
                 this.mode16Btn.addEventListener('click', () => this.switchMode('16/8'));
+                
+                // Calendar export
+                this.exportBtn.addEventListener('click', () => this.toggleExportOptions());
+                document.querySelectorAll('.days-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const days = parseInt(e.target.dataset.days);
+                        this.exportToCalendar(days);
+                    });
+                });
+                
+                // Start time configuration
+                this.configBtn.addEventListener('click', () => this.openStartTimeModal());
+                this.closeModal.addEventListener('click', () => this.closeStartTimeModal());
+                this.applyStartTime.addEventListener('click', () => this.applyCustomStartTime());
+                
+                // Phase selection buttons
+                document.querySelectorAll('.phase-select-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.phase-select-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.selectedPhase = e.target.dataset.phase;
+                    });
+                });
+                
+                // Close modal on background click
+                this.startTimeModal.addEventListener('click', (e) => {
+                    if (e.target === this.startTimeModal) {
+                        this.closeStartTimeModal();
+                    }
+                });
+                
+                // Set default date and time
+                this.setDefaultDateTime();
+            }
+
+            setDefaultDateTime() {
+                const now = new Date();
+                
+                // Set date to today
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                this.startDateInput.value = `${year}-${month}-${day}`;
+                
+                // Set time to current time
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                this.startTimeInput.value = `${hours}:${minutes}`;
+            }
+
+            openStartTimeModal() {
+                this.startTimeModal.style.display = 'flex';
+                this.setDefaultDateTime();
+            }
+
+            closeStartTimeModal() {
+                this.startTimeModal.style.display = 'none';
+            }
+
+            applyCustomStartTime() {
+                const dateStr = this.startDateInput.value;
+                const timeStr = this.startTimeInput.value;
+                
+                if (!dateStr || !timeStr) {
+                    alert('Bitte Datum und Uhrzeit eingeben!');
+                    return;
+                }
+                
+                // Parse the start time
+                const [year, month, day] = dateStr.split('-').map(Number);
+                const [hours, minutes] = timeStr.split(':').map(Number);
+                const startTime = new Date(year, month - 1, day, hours, minutes, 0);
+                
+                // Calculate elapsed time since start
+                const now = Date.now();
+                const elapsed = now - startTime.getTime();
+                
+                if (elapsed < 0) {
+                    alert('Die Startzeit kann nicht in der Zukunft liegen!');
+                    return;
+                }
+                
+                // Determine current phase and remaining time
+                const mode = this.modes[this.currentMode];
+                let currentPhase = this.selectedPhase;
+                let remainingInCurrentPhase = elapsed;
+                
+                // Calculate which phase we're in based on elapsed time
+                const phaseDuration = currentPhase === 'active' ? mode.active : mode.rest;
+                
+                while (remainingInCurrentPhase >= phaseDuration) {
+                    remainingInCurrentPhase -= phaseDuration;
+                    currentPhase = currentPhase === 'active' ? 'rest' : 'active';
+                    const newPhaseDuration = currentPhase === 'active' ? mode.active : mode.rest;
+                    if (remainingInCurrentPhase < newPhaseDuration) break;
+                }
+                
+                // Set the timer
+                this.currentPhase = currentPhase;
+                const currentPhaseDuration = currentPhase === 'active' ? mode.active : mode.rest;
+                this.remainingTime = currentPhaseDuration - remainingInCurrentPhase;
+                
+                // Start the timer automatically
+                if (this.isRunning) {
+                    this.pause();
+                }
+                this.start();
+                
+                this.updateDisplay();
+                this.closeStartTimeModal();
+            }
+
+            toggleExportOptions() {
+                const isVisible = this.exportOptions.style.display !== 'none';
+                this.exportOptions.style.display = isVisible ? 'none' : 'block';
+            }
+
+            exportToCalendar(days) {
+                const events = this.generateCalendarEvents(days);
+                
+                // Create ICS file
+                const icsContent = this.createICSFile(events);
+                
+                // Download ICS file
+                const blob = new Blob([icsContent], { type: 'text/calendar' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `intervallfasten-${days}-tage.ics`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                // Show success message
+                this.exportBtn.textContent = '✅ Kalender-Datei heruntergeladen!';
+                setTimeout(() => {
+                    this.exportBtn.textContent = '📅 Zu Google Kalender hinzufügen';
+                    this.exportOptions.style.display = 'none';
+                }, 3000);
+            }
+
+            generateCalendarEvents(days) {
+                const events = [];
+                const mode = this.modes[this.currentMode];
+                const startDate = new Date();
+                
+                let currentTime = startDate.getTime();
+                let isActive = true; // Start with fasting phase
+                
+                const endTime = currentTime + (days * 24 * 60 * 60 * 1000);
+                
+                while (currentTime < endTime) {
+                    const duration = isActive ? mode.active : mode.rest;
+                    const phaseEnd = currentTime + duration;
+                    
+                    events.push({
+                        title: isActive ? '🥗 Fasten' : '🍽️ Essensphase',
+                        start: new Date(currentTime),
+                        end: new Date(phaseEnd),
+                        description: isActive 
+                            ? `Fastenphase (${this.currentMode} Modus)`
+                            : `Essensphase (${this.currentMode} Modus)`,
+                        isActive: isActive
+                    });
+                    
+                    currentTime = phaseEnd;
+                    isActive = !isActive;
+                }
+                
+                return events;
+            }
+
+            createICSFile(events) {
+                const formatDate = (date) => {
+                    const pad = (n) => n.toString().padStart(2, '0');
+                    return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
+                };
+                
+                let ics = 'BEGIN:VCALENDAR\r\n';
+                ics += 'VERSION:2.0\r\n';
+                ics += 'PRODID:-//Intervallfasten Timer//DE\r\n';
+                ics += 'CALSCALE:GREGORIAN\r\n';
+                ics += 'METHOD:PUBLISH\r\n';
+                ics += 'X-WR-CALNAME:Intervallfasten\r\n';
+                ics += 'X-WR-TIMEZONE:Europe/Berlin\r\n';
+                
+                events.forEach((event, index) => {
+                    ics += 'BEGIN:VEVENT\r\n';
+                    ics += `UID:${Date.now()}-${index}@intervallfasten-timer.app\r\n`;
+                    ics += `DTSTAMP:${formatDate(new Date())}\r\n`;
+                    ics += `DTSTART:${formatDate(event.start)}\r\n`;
+                    ics += `DTEND:${formatDate(event.end)}\r\n`;
+                    ics += `SUMMARY:${event.title}\r\n`;
+                    ics += `DESCRIPTION:${event.description}\r\n`;
+                    
+                    // Add reminders
+                    ics += 'BEGIN:VALARM\r\n';
+                    ics += 'TRIGGER:-PT15M\r\n';
+                    ics += 'ACTION:DISPLAY\r\n';
+                    ics += `DESCRIPTION:${event.title} endet in 15 Minuten\r\n`;
+                    ics += 'END:VALARM\r\n';
+                    
+                    ics += 'END:VEVENT\r\n';
+                });
+                
+                ics += 'END:VCALENDAR\r\n';
+                
+                return ics;
             }
 
             switchMode(mode) {
