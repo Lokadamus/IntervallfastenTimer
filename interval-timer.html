@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
+    <title>Intervallfasten Timer</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0e27;
+            --color-bg-light: #141937;
+            --color-primary: #00ff88;
+            --color-secondary: #ff0080;
+            --color-text: #e8ecf3;
+            --color-text-dim: #7a8195;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 0, 128, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .mode-btn {
+            font-family: 'Orbitron', sans-serif;
+            background: var(--color-bg-light);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: var(--color-text-dim);
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-btn.active {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .mode-btn:hover:not(.active) {
+            border-color: var(--color-text);
+            color: var(--color-text);
+            transform: translateY(-2px);
+        }
+
+        .phase-indicator {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+            font-weight: 700;
+        }
+
+        .phase-indicator.active {
+            color: var(--color-primary);
+            opacity: 1;
+            text-shadow: 0 0 20px var(--color-primary);
+        }
+
+        .phase-indicator.rest {
+            color: var(--color-secondary);
+            opacity: 1;
+            text-shadow: 0 0 20px var(--color-secondary);
+        }
+
+        .timer-display {
+            background: var(--color-bg-light);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 60px rgba(0, 255, 136, 0.2),
+                inset 0 0 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .timer-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            border-radius: 4px;
+            transition: width 1s linear;
+            box-shadow: 0 0 20px var(--color-primary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        button {
+            font-family: 'Orbitron', sans-serif;
+            background: var(--color-bg-light);
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--color-primary);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            opacity: 0.3;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            background: var(--color-primary);
+            color: var(--color-bg);
+            box-shadow: 0 0 30px var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.reset {
+            border-color: var(--color-secondary);
+            color: var(--color-secondary);
+        }
+
+        button.reset:hover {
+            background: var(--color-secondary);
+            box-shadow: 0 0 30px var(--color-secondary);
+        }
+
+        button.reset::before {
+            background: var(--color-secondary);
+        }
+
+        .cycle-info {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cycle-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--color-text-dim);
+        }
+
+        .cycle-display {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+
+        .cycle-item {
+            flex: 1;
+            padding: 1rem;
+            background: var(--color-bg);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cycle-item.active {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .cycle-item.rest-active {
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+        }
+
+        .cycle-label {
+            font-size: 0.7rem;
+            color: var(--color-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .cycle-time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .install-prompt {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--color-primary);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .install-prompt.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .time {
+                font-size: 3.5rem;
+            }
+            
+            .mode-selector {
+                gap: 0.5rem;
+            }
+            
+            .mode-btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mode-selector">
+            <button class="mode-btn active" id="mode36Btn" data-mode="36/12">36/12</button>
+            <button class="mode-btn" id="mode16Btn" data-mode="16/8">16/8</button>
+        </div>
+
+        <div class="phase-indicator" id="phaseIndicator">Fasten</div>
+        
+        <div class="timer-display">
+            <div class="time" id="timeDisplay">36:00:00</div>
+            <div class="time-label">Verbleibende Zeit</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="toggleBtn">Start</button>
+            <button class="reset" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="cycle-info">
+            <h3>Zyklusmuster</h3>
+            <div class="cycle-display">
+                <div class="cycle-item active" id="activePhaseCard">
+                    <div class="cycle-label">Fasten</div>
+                    <div class="cycle-time">36h</div>
+                </div>
+                <div class="cycle-item" id="restPhaseCard">
+                    <div class="cycle-label">Essensphase</div>
+                    <div class="cycle-time">12h</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="install-prompt" id="installPrompt">
+            📱 Tippe auf "Teilen" und dann "Zum Home-Bildschirm" um die App zu installieren!
+        </div>
+    </div>
+
+    <script>
+        class IntervalTimer {
+            constructor() {
+                // Timer modes
+                this.modes = {
+                    '36/12': { active: 36 * 60 * 60 * 1000, rest: 12 * 60 * 60 * 1000 },
+                    '16/8': { active: 16 * 60 * 60 * 1000, rest: 8 * 60 * 60 * 1000 }
+                };
+                
+                this.currentMode = '36/12';
+                this.currentPhase = 'active';
+                this.remainingTime = this.modes[this.currentMode].active;
+                this.isRunning = false;
+                this.interval = null;
+                this.endTime = null;
+                
+                this.timeDisplay = document.getElementById('timeDisplay');
+                this.toggleBtn = document.getElementById('toggleBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.progressFill = document.getElementById('progressFill');
+                this.phaseIndicator = document.getElementById('phaseIndicator');
+                this.activePhaseCard = document.getElementById('activePhaseCard');
+                this.restPhaseCard = document.getElementById('restPhaseCard');
+                this.mode36Btn = document.getElementById('mode36Btn');
+                this.mode16Btn = document.getElementById('mode16Btn');
+                
+                this.loadState();
+                this.setupEventListeners();
+                this.updateDisplay();
+                this.updateModeDisplay();
+                this.requestNotificationPermission();
+                this.showInstallPrompt();
+            }
+
+            setupEventListeners() {
+                this.toggleBtn.addEventListener('click', () => this.toggle());
+                this.resetBtn.addEventListener('click', () => this.reset());
+                this.mode36Btn.addEventListener('click', () => this.switchMode('36/12'));
+                this.mode16Btn.addEventListener('click', () => this.switchMode('16/8'));
+            }
+
+            switchMode(mode) {
+                if (mode === this.currentMode) return;
+                
+                // Pause timer if running
+                if (this.isRunning) {
+                    this.pause();
+                }
+                
+                // Switch mode
+                this.currentMode = mode;
+                this.currentPhase = 'active';
+                this.remainingTime = this.modes[mode].active;
+                
+                // Update UI
+                this.updateModeDisplay();
+                this.updateDisplay();
+                this.updateCycleCards();
+                this.saveState();
+            }
+
+            updateModeDisplay() {
+                this.mode36Btn.classList.toggle('active', this.currentMode === '36/12');
+                this.mode16Btn.classList.toggle('active', this.currentMode === '16/8');
+            }
+
+            updateCycleCards() {
+                const mode = this.modes[this.currentMode];
+                const activeHours = mode.active / (60 * 60 * 1000);
+                const restHours = mode.rest / (60 * 60 * 1000);
+                
+                document.querySelector('#activePhaseCard .cycle-time').textContent = `${activeHours}h`;
+                document.querySelector('#restPhaseCard .cycle-time').textContent = `${restHours}h`;
+            }
+
+            toggle() {
+                if (this.isRunning) {
+                    this.pause();
+                } else {
+                    this.start();
+                }
+            }
+
+            start() {
+                this.isRunning = true;
+                this.endTime = Date.now() + this.remainingTime;
+                this.toggleBtn.textContent = 'Pause';
+                
+                this.interval = setInterval(() => {
+                    this.tick();
+                }, 1000);
+                
+                this.saveState();
+            }
+
+            pause() {
+                this.isRunning = false;
+                this.toggleBtn.textContent = 'Start';
+                clearInterval(this.interval);
+                this.saveState();
+            }
+
+            tick() {
+                this.remainingTime = Math.max(0, this.endTime - Date.now());
+                
+                if (this.remainingTime <= 0) {
+                    this.switchPhase();
+                }
+                
+                this.updateDisplay();
+                this.saveState();
+            }
+
+            switchPhase() {
+                // Notify user
+                this.notify();
+                
+                // Switch to next phase
+                const mode = this.modes[this.currentMode];
+                if (this.currentPhase === 'active') {
+                    this.currentPhase = 'rest';
+                    this.remainingTime = mode.rest;
+                } else {
+                    this.currentPhase = 'active';
+                    this.remainingTime = mode.active;
+                }
+                
+                this.endTime = Date.now() + this.remainingTime;
+                this.updateDisplay();
+                this.saveState();
+            }
+
+            reset() {
+                this.pause();
+                this.currentPhase = 'active';
+                this.remainingTime = this.modes[this.currentMode].active;
+                this.updateDisplay();
+                this.saveState();
+            }
+
+            updateDisplay() {
+                // Format time
+                const hours = Math.floor(this.remainingTime / (1000 * 60 * 60));
+                const minutes = Math.floor((this.remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((this.remainingTime % (1000 * 60)) / 1000);
+                
+                this.timeDisplay.textContent = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                // Update progress bar
+                const mode = this.modes[this.currentMode];
+                const totalTime = this.currentPhase === 'active' ? mode.active : mode.rest;
+                const progress = ((totalTime - this.remainingTime) / totalTime) * 100;
+                this.progressFill.style.width = `${progress}%`;
+                
+                // Update phase indicator
+                if (this.currentPhase === 'active') {
+                    this.phaseIndicator.textContent = 'Fasten';
+                    this.phaseIndicator.className = 'phase-indicator active';
+                    this.activePhaseCard.className = 'cycle-item active';
+                    this.restPhaseCard.className = 'cycle-item';
+                } else {
+                    this.phaseIndicator.textContent = 'Essensphase';
+                    this.phaseIndicator.className = 'phase-indicator rest';
+                    this.activePhaseCard.className = 'cycle-item';
+                    this.restPhaseCard.className = 'cycle-item rest-active';
+                }
+                
+                // Update cycle cards
+                this.updateCycleCards();
+            }
+
+            saveState() {
+                const state = {
+                    currentMode: this.currentMode,
+                    currentPhase: this.currentPhase,
+                    remainingTime: this.remainingTime,
+                    isRunning: this.isRunning,
+                    endTime: this.endTime
+                };
+                localStorage.setItem('intervalTimer', JSON.stringify(state));
+            }
+
+            loadState() {
+                const saved = localStorage.getItem('intervalTimer');
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    this.currentMode = state.currentMode || '36/12';
+                    this.currentPhase = state.currentPhase;
+                    
+                    if (state.isRunning) {
+                        this.remainingTime = Math.max(0, state.endTime - Date.now());
+                        if (this.remainingTime > 0) {
+                            this.start();
+                        } else {
+                            this.switchPhase();
+                            this.start();
+                        }
+                    } else {
+                        this.remainingTime = state.remainingTime;
+                    }
+                }
+            }
+
+            async requestNotificationPermission() {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    await Notification.requestPermission();
+                }
+            }
+
+            notify() {
+                const title = this.currentPhase === 'active' 
+                    ? '🔔 Essensphase beendet!' 
+                    : '🔔 Fastenphase beendet!';
+                const mode = this.modes[this.currentMode];
+                const nextHours = this.currentPhase === 'active' 
+                    ? mode.active / (60 * 60 * 1000)
+                    : mode.rest / (60 * 60 * 1000);
+                const body = this.currentPhase === 'active'
+                    ? `Die Essensphase ist vorbei. Starte jetzt mit der ${nextHours}-Stunden Fastenphase!`
+                    : `Die Fastenphase ist vorbei. Zeit für die ${nextHours}-Stunden Essensphase!`;
+
+                // Try notification
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, {
+                        body: body,
+                        icon: '/icon-192.png',
+                        badge: '/icon-192.png',
+                        vibrate: [200, 100, 200]
+                    });
+                }
+
+                // Vibrate if available
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([200, 100, 200, 100, 200]);
+                }
+            }
+
+            showInstallPrompt() {
+                // Show install prompt on iOS
+                const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+                
+                if (isIos && !isStandalone) {
+                    setTimeout(() => {
+                        document.getElementById('installPrompt').classList.add('show');
+                    }, 3000);
+                }
+            }
+        }
+
+        // Initialize timer
+        const timer = new IntervalTimer();
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+    </script>
+</body>
+</html>
