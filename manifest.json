@@ -2,7 +2,7 @@
   "name": "Intervallfasten Timer",
   "short_name": "IF Timer",
   "description": "Alternierender Fastenzeit-Timer: 36h/12h und 16h/8h Modi",
-  "start_url": "./interval-timer.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0e27",
   "theme_color": "#0a0e27",

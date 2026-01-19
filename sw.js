@@ -1,6 +1,6 @@
-const CACHE_NAME = 'interval-timer-v1';
+const CACHE_NAME = 'interval-timer-v2';
 const urlsToCache = [
-  './interval-timer.html',
+  './index.html',
   './manifest.json'
 ];
 
