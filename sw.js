@@ -1,7 +1,7 @@
 const CACHE_NAME = 'interval-timer-v1';
 const urlsToCache = [
-  '/interval-timer.html',
-  '/manifest.json'
+  './interval-timer.html',
+  './manifest.json'
 ];
 
 // Install event - cache files
