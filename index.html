@@ -778,7 +778,7 @@
                 this.startTimeInput = document.getElementById('startTime');
                 this.selectedPhase = 'active';
                 this.resetModal = document.getElementById('resetModal');
-                this.closeResetModal = document.getElementById('closeResetModal');
+                this.closeResetModalBtn = document.getElementById('closeResetModal');
                 this.cancelReset = document.getElementById('cancelReset');
                 this.confirmReset = document.getElementById('confirmReset');
                 
@@ -802,8 +802,8 @@
                 this.applyStartTime.addEventListener('click', () => this.applyCustomStartTime());
                 
                 // Reset confirmation
-                this.closeResetModal.addEventListener('click', () => this.closeResetModal());
-                this.cancelReset.addEventListener('click', () => this.closeResetModal());
+                this.closeResetModalBtn.addEventListener('click', () => this.hideResetModal());
+                this.cancelReset.addEventListener('click', () => this.hideResetModal());
                 this.confirmReset.addEventListener('click', () => this.confirmResetTimer());
                 
                 // Phase selection buttons
@@ -824,7 +824,7 @@
                 
                 this.resetModal.addEventListener('click', (e) => {
                     if (e.target === this.resetModal) {
-                        this.closeResetModal();
+                        this.hideResetModal();
                     }
                 });
                 
@@ -913,13 +913,13 @@
                 this.resetModal.style.display = 'flex';
             }
 
-            closeResetModal() {
+            hideResetModal() {
                 this.resetModal.style.display = 'none';
             }
 
             confirmResetTimer() {
                 this.reset();
-                this.closeResetModal();
+                this.hideResetModal();
             }
 
             switchMode(mode) {
