@@ -212,7 +212,8 @@
         }
 
         .controls {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
@@ -636,11 +637,14 @@
             }
             
             .controls {
-                flex-direction: column;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.8rem;
             }
             
             button {
                 width: 100%;
+                padding: 0.9rem 1.5rem;
+                font-size: 0.85rem;
             }
             
             .modal-content {
@@ -669,7 +673,6 @@
         </div>
 
         <div class="controls">
-            <button id="toggleBtn">Start</button>
             <button class="reset" id="resetBtn">Reset</button>
             <button class="config" id="configBtn">⏰ Startzeit</button>
         </div>
@@ -762,7 +765,6 @@
                 this.endTime = null;
                 
                 this.timeDisplay = document.getElementById('timeDisplay');
-                this.toggleBtn = document.getElementById('toggleBtn');
                 this.resetBtn = document.getElementById('resetBtn');
                 this.progressFill = document.getElementById('progressFill');
                 this.progressPercentage = document.getElementById('progressPercentage');
@@ -792,7 +794,6 @@
             }
 
             setupEventListeners() {
-                this.toggleBtn.addEventListener('click', () => this.toggle());
                 this.resetBtn.addEventListener('click', () => this.openResetModal());
                 this.mode36Btn.addEventListener('click', () => this.switchMode('36/12'));
                 this.mode16Btn.addEventListener('click', () => this.switchMode('16/8'));
@@ -926,15 +927,18 @@
             switchMode(mode) {
                 if (mode === this.currentMode) return;
                 
-                // Pause timer if running
+                // Stop timer if running
                 if (this.isRunning) {
-                    this.pause();
+                    clearInterval(this.interval);
                 }
                 
                 // Switch mode
                 this.currentMode = mode;
                 this.currentPhase = 'active';
                 this.remainingTime = this.modes[mode].active;
+                
+                // Auto-start timer
+                this.start();
                 
                 // Update UI
                 this.updateModeDisplay();
@@ -957,30 +961,14 @@
                 document.querySelector('#restPhaseCard .cycle-time').textContent = `${restHours}h`;
             }
 
-            toggle() {
-                if (this.isRunning) {
-                    this.pause();
-                } else {
-                    this.start();
-                }
-            }
-
             start() {
                 this.isRunning = true;
                 this.endTime = Date.now() + this.remainingTime;
-                this.toggleBtn.textContent = 'Pause';
                 
                 this.interval = setInterval(() => {
                     this.tick();
                 }, 1000);
                 
-                this.saveState();
-            }
-
-            pause() {
-                this.isRunning = false;
-                this.toggleBtn.textContent = 'Start';
-                clearInterval(this.interval);
                 this.saveState();
             }
 
@@ -1015,9 +1003,16 @@
             }
 
             reset() {
-                this.pause();
+                // Stop timer if running
+                if (this.isRunning) {
+                    clearInterval(this.interval);
+                }
                 this.currentPhase = 'active';
                 this.remainingTime = this.modes[this.currentMode].active;
+                
+                // Auto-start timer
+                this.start();
+                
                 this.updateDisplay();
                 this.saveState();
             }
