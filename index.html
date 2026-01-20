@@ -901,9 +901,9 @@
                 const currentPhaseDuration = currentPhase === 'active' ? mode.active : mode.rest;
                 this.remainingTime = currentPhaseDuration - remainingInCurrentPhase;
                 
-                // Start the timer automatically
+                // Stop timer if running and restart
                 if (this.isRunning) {
-                    this.pause();
+                    clearInterval(this.interval);
                 }
                 this.start();
                 
