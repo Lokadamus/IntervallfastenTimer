@@ -185,8 +185,8 @@
             height: 8px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
-            overflow: hidden;
-            margin-top: 2rem;
+            overflow: visible;
+            margin-top: 2.5rem;
             position: relative;
         }
 
@@ -200,14 +200,15 @@
 
         .progress-percentage {
             position: absolute;
-            top: -2rem;
+            top: -1.5rem;
             right: 0;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--color-primary);
-            text-shadow: 0 0 10px var(--color-primary);
+            text-shadow: 0 0 15px var(--color-primary);
             letter-spacing: 0.1em;
+            z-index: 10;
         }
 
         .controls {
